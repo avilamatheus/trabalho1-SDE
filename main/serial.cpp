@@ -1,6 +1,9 @@
 
 #include "serial.h"
 
+/**
+ * Inicia a porta serial.
+*/
 void Serial::begin (int v){
     uart_config_t uart_config = {
         .baud_rate = v,                      //Bluetooth baud rate 
@@ -12,6 +15,10 @@ void Serial::begin (int v){
     
     uart_param_config(UART_NUM_0, &uart_config); 
 }
+
+/**
+ * Le um char da porta serial.
+*/
 char Serial::readChar(void)
 {
 	int c;
@@ -25,8 +32,11 @@ char Serial::readChar(void)
 	}
 	return c;
 }
-void Serial::readString( uint8_t *buf, uint32_t l) {
 
+/**
+ * Le uma String da porta serial.
+*/
+void Serial::readString( uint8_t *buf, uint32_t l) {
 int lidos = 0, c;
 	while (lidos <= l)
 	{

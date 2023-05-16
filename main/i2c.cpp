@@ -17,28 +17,43 @@ gpio_num_t CLK_PIN;
 #define delay_us(A) ets_delay_us(2 * A)
 #define delay_ms(A) vTaskDelay(500 / portTICK_PERIOD_MS)
 
+/**
+ * Define o pino de dados como saida e seta o valor para 0.
+*/
 void I2C::data_low(void)
 {
     digital.pinMode(DATA_PIN, OUTPUT);
     digital.digitalWrite(DATA_PIN, LOW);
 }
 
+/**
+ * Define o pino de dados como entrada.
+*/
 void I2C::data_high(void)
 {
     digital.pinMode(DATA_PIN, INPUT);
 }
 
+/**
+ * Define o pino de clock como entrada.
+*/
 void I2C::clock_high(void)
 {
     digital.pinMode(CLK_PIN, INPUT);
 }
 
+/**
+ * Define o pino de clock como saida e seta o valor para 0.
+*/
 void I2C::clock_low(void)
 {
     digital.pinMode(CLK_PIN, OUTPUT);
     digital.digitalWrite(CLK_PIN, LOW);
 }
 
+/**
+ * Configura o I2C, passando os pinos de dados e clock.
+*/
 void I2C::configure(gpio_num_t data_pin, gpio_num_t clk_pin)
 {
     DATA_PIN = data_pin;
@@ -49,6 +64,10 @@ void I2C::configure(gpio_num_t data_pin, gpio_num_t clk_pin)
     data_high();
     delay_ms(1);
 }
+
+/**
+ * Inicia o I2C.
+*/
 void I2C::start(void)
 {
     clock_high();
@@ -61,6 +80,9 @@ void I2C::start(void)
     delay_us(10);
 }
 
+/**
+ * Escreve um bit no barramento I2C.
+*/
 void I2C::write_bit(uint8_t bit)
 {
     if (bit)
@@ -74,6 +96,9 @@ void I2C::write_bit(uint8_t bit)
     data_high();
 }
 
+/**
+ * Le um bit do barramento I2C.
+*/
 uint8_t I2C::read_bit(void)
 {
     uint8_t value;
@@ -87,6 +112,9 @@ uint8_t I2C::read_bit(void)
     return value;
 }
 
+/**
+ * Escreve um byte no barramento I2C.
+*/
 uint8_t I2C::write(uint8_t byte)
 {
     uint8_t a, x;
@@ -98,6 +126,9 @@ uint8_t I2C::write(uint8_t byte)
     return a;
 }
 
+/**
+ * Le um byte do barramento I2C.
+*/
 uint8_t I2C::read(void)
 {
     uint8_t value = 0, x;
@@ -107,6 +138,9 @@ uint8_t I2C::read(void)
     return value;
 }
 
+/**
+ * Le o ACK do barramento I2C.
+*/
 uint8_t I2C::read_ack(uint8_t ack)
 {
     uint8_t value = 0, x;
@@ -117,6 +151,9 @@ uint8_t I2C::read_ack(uint8_t ack)
     return value;
 }
 
+/**
+ * Para o I2C.
+*/
 void I2C::stop(void)
 {
     data_low();

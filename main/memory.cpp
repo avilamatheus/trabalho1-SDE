@@ -4,11 +4,17 @@
 #include "db.h"
 #include <stdio.h>
 
+/**
+ * Instancia a classe I2C.
+ */
 Memory::Memory(void)
 {
 	myI2c = I2C();
 }
 
+/**
+ * Verifica se o dispositivo esta disponivel.
+ */
 void Memory::checkEepromAvailability(void)
 {
 	uint8_t device = 0x50 | targetDevice;
@@ -21,12 +27,19 @@ void Memory::checkEepromAvailability(void)
 			return;
 	}
 }
+
+/**
+ * Inicia a memoria.
+ */
 void Memory::init(uint8_t device)
 {
 	targetDevice = device;
 	myI2c.configure(PIN16, PIN5);
 }
 
+/**
+ * Escreve dados na memoria.
+ */
 void Memory::write(uint16_t address, uint8_t data[], uint16_t length)
 {
 	uint8_t device = 0x50 | targetDevice;
@@ -44,6 +57,9 @@ void Memory::write(uint16_t address, uint8_t data[], uint16_t length)
 	}
 }
 
+/**
+ * Le dados da memoria.
+*/
 void Memory::read(uint16_t address, uint8_t data[], uint16_t length)
 {
 	uint8_t device = 0x50 | targetDevice;

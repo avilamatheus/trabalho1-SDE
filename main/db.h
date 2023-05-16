@@ -22,7 +22,7 @@ public:
     void createHeader(Header *h);
     void updateHeader();
     void removeHeader();
-    Header readHeader(char command);
+    Header readHeader(bool printNum);
     void saveRecord(uint16_t record_number, Record *R);
     void listRecords();
     void searchName(char name[20]);

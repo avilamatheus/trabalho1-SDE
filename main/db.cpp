@@ -4,16 +4,22 @@
 #include "memory.h"
 #include <string.h>
 
+/**
+ * Cria um cabeçalho
+*/
 void createHeader(Header *c)
 {
     MEMORY.write(0, (uint8_t *)c, sizeof(Header));
 }
 
-Header readHeader(char command)
+/**
+ * Lê um cabeçalho
+*/
+Header readHeader(bool printNum)
 {
     Header actualHeader;
     MEMORY.read(0, (uint8_t *)&actualHeader, sizeof(Header));
-    if (command == '6')
+    if (printNum)
     {
         printf("Amount of used records: %d\n", actualHeader.used_record_number);
     }
@@ -21,20 +27,29 @@ Header readHeader(char command)
     return actualHeader;
 }
 
+/**
+ * Atualiza um cabeçalho
+*/
 void updateHeader()
 {
-    Header actualHeader = readHeader('0');
+    Header actualHeader = readHeader(false);
     actualHeader.used_record_number = actualHeader.used_record_number + 1;
     MEMORY.write(0, (uint8_t *)&actualHeader, sizeof(Header));
 };
 
+/**
+ * Remove um cabeçalho
+*/
 void removeHeader()
 {
-    Header actualHeader = readHeader('0');
+    Header actualHeader = readHeader(false);
     actualHeader.used_record_number = actualHeader.used_record_number - 1;
     MEMORY.write(0, (uint8_t *)&actualHeader, sizeof(Header));
 };
 
+/**
+ * Salva um registro na memória
+*/
 void saveRecord(uint16_t record_number, Record *R)
 {
     uint16_t position;
@@ -51,9 +66,12 @@ void saveRecord(uint16_t record_number, Record *R)
     }
 };
 
+/**
+ * Lista os registros salvos na memória
+*/
 void listRecords()
 {
-    Header register_length = readHeader('1');
+    Header register_length = readHeader(false);
     Record register_queried;
 
     uint16_t position;
@@ -65,10 +83,13 @@ void listRecords()
     }
 };
 
+/**
+ * Busca um registro pelo nome
+*/
 void searchName(char n[20])
 {
     bool find = false;
-    Header register_length = readHeader('3');
+    Header register_length = readHeader(false);
     Record register_queried;
 
     uint16_t position;
@@ -90,10 +111,13 @@ void searchName(char n[20])
     }
 }
 
+/**
+ * Busca um registro pelo telefone
+*/
 Record searchPhone(char phone[14])
 {
     bool find = false;
-    Header register_length = readHeader('4');
+    Header register_length = readHeader(false);
     Record register_phone;
     Record register_queried;
 
@@ -119,13 +143,16 @@ Record searchPhone(char phone[14])
     return register_phone;
 }
 
+/**
+ * Remove um registro pelo telefone
+*/
 void removeRecord(char phone[14])
 {
     Record register_to_remove;
     printf("\n");
     register_to_remove = searchPhone(phone);
 
-    Header register_length = readHeader('5');
+    Header register_length = readHeader(false);
     Record register_queried;
 
     uint16_t position;

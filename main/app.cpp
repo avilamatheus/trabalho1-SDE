@@ -15,6 +15,9 @@ extern "C" void app_main();
 Header header;
 int v = 0;
 
+/**
+ * Opções do menu principal, retorna a opção escolhida pelo usuário
+*/
 char menu(void)
 {
   char option;
@@ -31,13 +34,19 @@ char menu(void)
   option = serial.readChar();
   return option;
 }
+
+/**
+ * Função main do programa
+*/
 void app_main()
 {
+  // Inicializa a memória
   Memory i2c = Memory();
-
   i2c.init(0);
 
+  // Inicia a comunicação serial
   serial.begin(9600);
+
   char name[20];
   char phone[14];
 
@@ -47,6 +56,7 @@ void app_main()
     switch (option_input)
     {
     case '1':
+      // lista todos os registros salvos na memória
       listRecords();
       printf("\n");
       break;
@@ -55,7 +65,7 @@ void app_main()
       Record new_record;
 
       printf("\n");
-      position = readHeader('2');
+      position = readHeader(false);
       printf("Enter the name: ");
 
       serial.readString((uint8_t *)new_record.name, 20);
@@ -71,6 +81,7 @@ void app_main()
 
       printf("%s\n", new_record.phone);
 
+      // salva o registro na memória
       saveRecord(position.used_record_number, &new_record);
       printf("\n");
       break;
@@ -79,6 +90,8 @@ void app_main()
       printf("Enter the name: ");
       serial.readString((uint8_t *)name, 20);
       printf("\n");
+
+      // busca o registro pelo nome
       searchName(name);
       printf("\n");
       break;
@@ -87,6 +100,8 @@ void app_main()
       printf("Enter the phone: ");
       serial.readString((uint8_t *)phone, 14);
       printf("\n");
+
+      // busca o registro pelo telefone
       searchPhone(phone);
       printf("\n");
       break;
@@ -94,12 +109,16 @@ void app_main()
       printf("\n");
       printf("Enter the phone: ");
       serial.readString((uint8_t *)phone, 14);
+
+      // remove o registro pelo telefone
       removeRecord(phone);
       printf("\n");
       break;
     case '6':
       printf("\n");
-      readHeader('6');
+
+      // mostra o número de registros salvos na memória
+      readHeader(true);
       printf("\n");
       break;
     case '7':
